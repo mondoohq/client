@@ -561,6 +561,8 @@ configure_macos_token() {
   purple_bold "\n* Authenticate with Mondoo Platform"
   config_path="$HOME/.config/mondoo"
   mkdir -p "$config_path"
+  purple_bold "${MONDOO_BINARY_PATH}"
+  purple_bold "${MONDOO_EXECUTABLE}"
   ${MONDOO_BINARY_PATH} login --config "$config_path/mondoo.yml" --token "$MONDOO_REGISTRATION_TOKEN" --timer "$TIMER" --splay "$SPLAY"
   if [ "$MONDOO_SERVICE" = "enable" ]; then
     sudo_cmd cp "$config_path/mondoo.yml" /Library/Mondoo/etc/mondoo.yml
@@ -655,7 +657,8 @@ autoupdater() {
     sudo_cmd launchctl bootout system/com.mondoo.autoupdater
     sudo_cmd rm -f /Library/LaunchDaemons/com.mondoo.autoupdater.plist
 
-    sudo_cmd curl -sSL https://install.mondoo.com/sh -o /Library/Mondoo/bin/mondoo-updater.sh
+    sudo_cmd curl -sSL https://install.mondoo.com/sh -o /tmp/mondoo-updater.sh
+    sudo_cmd cp /tmp/mondoo-updater.sh /Library/Mondoo/bin/mondoo-updater.sh
     sudo_cmd chmod a+x /Library/Mondoo/bin/mondoo-updater.sh
 
     sudo_cmd tee /Library/LaunchDaemons/com.mondoo.autoupdater.plist <<EOL
